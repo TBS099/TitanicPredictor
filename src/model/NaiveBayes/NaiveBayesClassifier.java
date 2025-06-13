@@ -6,22 +6,15 @@ import model.*;
 public class NaiveBayesClassifier {
 
     //Initialise variables
-    private int[] classes;
-    private double[] classPriors;
-    private double[][][] likelihoods;
-
-    private int numClasses;
-    private int numFeatures;
-    private int[] featureValueCounts;
-
-    //For counting during training
-    private int[][] classCounts;
-    private int[][][] featureCounts;
+    private final double[] classPriors;
+    private final double[][][] likelihoods;
+    private final int numClasses;
+    private final int numFeatures;
+    private final int[] featureValueCounts;
 
     //Initialise constructor
     public NaiveBayesClassifier(PreProcessor preProcessor) {
 
-        this.classes = preProcessor.getClassLabels();
         this.numClasses = preProcessor.getNumClasses();
         this.numFeatures = preProcessor.getNumFeatures();
         this.featureValueCounts = preProcessor.getFeatureValueCounts();
@@ -35,10 +28,14 @@ public class NaiveBayesClassifier {
             totalSamples += classCounts[c];
         }
 
-        //Calculate class priors
+        //Calculate class priors (probability of survived, not survived)
         classPriors = new double[numClasses];
-        likelihoods = new double[numFeatures][][];
+        for (int c = 0; c < numClasses; c++) {
+            classPriors[c] = (double) classCounts[c] / totalSamples;
+        }
 
+        //Initialize likelihoods array
+        likelihoods = new double[numFeatures][][];
         for (int f = 0; f < numFeatures; f++) {
             likelihoods[f] = new double[featureValueCounts[f]][numClasses];
         }
@@ -69,7 +66,6 @@ public class NaiveBayesClassifier {
 
         //Calculate log probabilities for each class
         for (int c = 0; c < numClasses; c++) {
-
             logProbs[c] = Math.log(classPriors[c]);
 
             for (int f = 0; f < numFeatures; f++) {
