@@ -11,7 +11,7 @@ public class DataLoader {
 
         //Count lines in the data file to initialise array
         int lineCount = 0;
-        Passenger[] passengers = null;
+        Passenger[] passengers;
 
         //First run: Count lines (Excluding headers and blank lines
         try {
@@ -19,19 +19,18 @@ public class DataLoader {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
 
             //Skip headerline
-            String headerline = reader.readLine();
+            reader.readLine();
             String line;
 
             while ((line = reader.readLine()) != null) {
 
-                if(!line.trim().isEmpty()) {
+                if (!line.trim().isEmpty()) {
                     lineCount++;
                 }
 
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
 
             System.err.println("Error reading file: " + e.getMessage());
             return new Passenger[0];
@@ -70,7 +69,7 @@ public class DataLoader {
             while ((line = reader.readLine()) != null) {
 
                 //Skip line if empty
-                if(line.trim().isEmpty()) {
+                if (line.trim().isEmpty()) {
                     continue;
                 }
 
@@ -95,8 +94,7 @@ public class DataLoader {
                     Passenger passenger = new Passenger(name, sex, pClass, age, sibsp, parch, ticket, fare, cabin, embarked, survived);
                     passengers[passengerIndex++] = passenger;
 
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                     System.err.println("Error reading line: " + line);
                     skipped++;
@@ -107,8 +105,7 @@ public class DataLoader {
 
             System.err.println("Skipped " + skipped + " passengers");
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
 
             System.err.println("Error reading file: " + e.getMessage());
 
@@ -121,8 +118,8 @@ public class DataLoader {
     //Helper function to find column index by name
     private static int findColumnIndex(String[] headers, String columnName) {
 
-        for(int i = 0; i < headers.length; i++) {
-            if(headers[i].equalsIgnoreCase(columnName)) {
+        for (int i = 0; i < headers.length; i++) {
+            if (headers[i].equalsIgnoreCase(columnName)) {
                 return i;
             }
         }
@@ -148,7 +145,7 @@ public class DataLoader {
 
         try {
             return Integer.parseInt(s);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return defaultValue;
         }
 
@@ -161,7 +158,7 @@ public class DataLoader {
 
         try {
             return Double.parseDouble(s);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return defaultValue;
         }
 
@@ -172,8 +169,12 @@ public class DataLoader {
 
         String s = getSafeString(tokens, index);
 
-        if (s.equals("1")) return true;
-        if (s.equals("0")) return false;
+        if (s.equals("1")) {
+            return true;
+        }
+        if (s.equals("0")) {
+            return false;
+        }
         return defaultValue;
 
     }

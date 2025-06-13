@@ -1,15 +1,14 @@
 package model.KNN;
 
-import model.Passenger;
-
 import java.util.Arrays;
 import java.util.Comparator;
+import model.Passenger;
 
 //Initialise KNNClassifier Class
 public class KNNClassifier {
 
     //Initialise variables
-    private Passenger[] trainingData;
+    private final Passenger[] trainingData;
 
     //Initialise constructor
     public KNNClassifier(Passenger[] trainingData) {
@@ -43,7 +42,7 @@ public class KNNClassifier {
                 .sorted(Comparator.comparingDouble(p -> distance(p.getFeatures(), input.getFeatures())))
                 .limit(k)
                 .map(p -> p.getSurvived() ? 1 : 0) // convert boolean to int (1 = survived)
-                .reduce(0, Integer::sum)           // sum how many survived
+                .reduce(0, Integer::sum) // sum how many survived
                 >= (k / 2.0);                      // return true if majority survived
 
     }
