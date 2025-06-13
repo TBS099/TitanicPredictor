@@ -1,6 +1,6 @@
 package model.DecisionTree;
 
-import model.Passenger;
+import model.*;
 
 //Initialise DecisionTree class
 public class DecisionTree {

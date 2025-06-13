@@ -1,12 +1,12 @@
 package controller;
 
-import model.*;
-import model.KNN.*;
-import model.DecisionTree.*;
-import view.*;
-
 import java.util.Arrays;
 import java.util.Random;
+import model.*;
+import model.DecisionTree.*;
+import model.KNN.*;
+import model.NaiveBayes.*;
+import view.*;
 
 //Initialise Main class
 public class Main {
@@ -18,7 +18,7 @@ public class Main {
         shuffleArray(passengers);
 
         //Split into 80/20
-        int splitIndex = (int)(passengers.length * 0.8);
+        int splitIndex = (int) (passengers.length * 0.8);
         Passenger[] trainingData = Arrays.copyOf(passengers, splitIndex);
         Passenger[] testData = Arrays.copyOfRange(passengers, splitIndex, passengers.length);
 
@@ -33,7 +33,9 @@ public class Main {
         //Check accuracy and print message
         int correct = 0;
         for (int i = 0; i < testData.length; i++) {
-            if(predictions[i] == testData[i].getSurvived()) correct++;
+            if (predictions[i] == testData[i].getSurvived()) {
+                correct++;
+            }
         }
 
         accuracyCalc("Decision Tree", correct, testData.length);
@@ -49,12 +51,29 @@ public class Main {
         for (Passenger s : testData) {
 
             boolean survivalPrediction = knn.predict(s, 5);
-            if (survivalPrediction == s.getSurvived()) correct++;
+            if (survivalPrediction == s.getSurvived()) {
+                correct++;
+            }
 
         }
 
         //Calculate accuracy and print out
         accuracyCalc("KNN Classifier", correct, testData.length);
+
+        //NaiveBayes Classifier
+        NaiveBayes nb = new NaiveBayes();
+        nb.fit(trainingData);
+        boolean[] naiveBayesPredictions = nb.predictAll(testData);
+
+        //Check accuracy and print message
+        int bayesCorrect = 0;
+        for (int i = 0; i < testData.length; i++) {
+            if (naiveBayesPredictions[i] == testData[i].getSurvived()) {
+                bayesCorrect++;
+            }
+        }
+
+        accuracyCalc("NaiveBayes Classifier", bayesCorrect, testData.length);
 
     }
 

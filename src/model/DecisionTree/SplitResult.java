@@ -1,6 +1,6 @@
 package model.DecisionTree;
 
-import model.Passenger;
+import model.*;
 
 //Initialise SplitResult Class
 public class SplitResult {

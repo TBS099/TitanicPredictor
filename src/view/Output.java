@@ -1,6 +1,6 @@
 package view;
 
-import model.Passenger;
+import model.*;
 
 //Initialise Output class
 public class Output {
